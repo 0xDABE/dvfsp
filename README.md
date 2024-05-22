@@ -2,6 +2,12 @@ Dabed Virtual File System can be used for tracking, syncing and monitoring files
 
 
 
+# Preview
+
+![gif preview](https://github.com/0xDABE/dvfsp/blob/main/output-pix-fmt.gif?raw=true)
+
+
+
 # Requirements
 
 - [JDK 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
