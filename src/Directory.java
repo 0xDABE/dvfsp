@@ -2,7 +2,7 @@ import java.util.ArrayList;
 
 public class Directory extends Elem {
 
-    private ArrayList<Elem> elems = new ArrayList<>();
+    private final ArrayList<Elem> elems = new ArrayList<>();
 
     public Directory(String name, Directory parent){
         super(name, true);
