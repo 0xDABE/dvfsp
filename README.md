@@ -22,5 +22,5 @@ Dabed Virtual File System can be used for tracking, syncing and monitoring files
 - [x] pwd
 - [x] exit
 - [x] rm
-- [ ] mv
-- [ ] cp
+- [x] mv
+- [x] cp
