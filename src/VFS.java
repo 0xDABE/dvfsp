@@ -27,6 +27,16 @@ public class VFS {
             addDirectory(paths[i]);
     }
 
+    public void rm(String call){
+        String[] paths = Parce.parceArguments(call);
+        if (paths.length == 1){
+            ColoredMessage.redLn("Wrong \"rm\" usage");
+            return;
+        }
+        for (int i = 1; i < paths.length; i++)
+            removeElem(paths[i]);
+    }
+
     public void cd(String call){
         String[] commands = Parce.parceArguments(call);
         if (call.trim().equals("cd"))
@@ -92,7 +102,7 @@ public class VFS {
             directoryPath = getCurrentAbsolutePath() + name.substring(0, name.length() -
                     fileName.length() - currentDirectory.getName().length());
 
-        currentDirectory = navigateToDirectory(directoryPath);
+        currentDirectory = navigateToDirectory(directoryPath, false);
 
         if (currentDirectory != null) {
             DFile file = new DFile(fileName, currentDirectory);
@@ -108,8 +118,45 @@ public class VFS {
         currentDirectory = orig;
     }
 
-    public void removeDirectory(String name){
-        Directory directory;
+
+    public void removeElem(String name){
+        Elem elem = getElemByPath(name);
+        Directory directory = elem.getParent();
+        directory.remove(elem);
+    }
+
+
+    public Elem getElemByPath(String path){
+        String[] parts = path.split("/");
+        Directory dir = path.startsWith("/") ? root : currentDirectory;
+
+        Elem lastElem = null;
+
+        for (String part : parts) {
+            if (part.isEmpty() || part.equals("."))
+                continue;
+            if (part.equals("..")) {
+                dir = dir.getParent();
+                if (dir == null)
+                    return null;
+            } else {
+                boolean found = false;
+                for (Elem elem : dir.getElems()) {
+                    if (elem.isDirectory() && elem.getName().equals(part)) {
+                        dir = (Directory) elem;
+                        lastElem = dir;
+                        found = true;
+                    }
+                    else if (elem.getName().equals(part)){
+                        found = true;
+                        lastElem = (DFile) elem;
+                    }
+                }
+                if (!found)
+                    return null;
+            }
+        }
+        return lastElem;
     }
 
     public String getCurrentAbsolutePath() {
@@ -126,7 +173,7 @@ public class VFS {
     }
 
     public void changeDirectory(String path){
-        Directory newDir = navigateToDirectory(path);
+        Directory newDir = navigateToDirectory(path, false);
         if (newDir != null)
             this.currentDirectory = newDir;
         else
@@ -137,7 +184,7 @@ public class VFS {
         this.currentDirectory = this.root;
     }
 
-    private Directory navigateToDirectory(String path){
+    public Directory navigateToDirectory(String path, boolean IGNORE_NOT_EXIST_PATH){
         String[] parts = path.split("/");
         Directory dir = path.startsWith("/") ? root : currentDirectory;
 
@@ -157,6 +204,8 @@ public class VFS {
                         break;
                     }
                 }
+                if (IGNORE_NOT_EXIST_PATH)
+                    return dir;
                 if (!found)
                     return null;
             }

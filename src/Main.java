@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static String user = "user";
+    public static String user = "dabe";
     public static Scanner scanner = new Scanner(System.in);
     public static VFS vfs = new VFS();
 
@@ -25,8 +25,7 @@ public class Main {
                 case "touch" -> vfs.touch(exec);
                 case "md" -> vfs.md(exec);
                 case "cd" -> vfs.cd(exec);
-                /**case "rm" -> {
-                }**/
+                case "rm" -> vfs.rm(exec);
 
                 /**case "mv" -> {
                 }**/
