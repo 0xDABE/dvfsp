@@ -26,9 +26,8 @@ public class Main {
                 case "md" -> vfs.md(exec);
                 case "cd" -> vfs.cd(exec);
                 case "rm" -> vfs.rm(exec);
-
-                /**case "mv" -> {
-                }**/
+                case "cp" -> vfs.cp(exec);
+                case "mv" -> vfs.mv(exec);
 
                 case "pwd" -> ColoredMessage.blueLn(vfs.getCurrentAbsolutePath());
                 case "exit" -> {return;}

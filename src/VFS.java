@@ -37,15 +37,52 @@ public class VFS {
             removeElem(paths[i]);
     }
 
+    public void cp(String call){
+        String[] paths = Parce.parceArguments(call);
+        Directory dst;
+        if (paths.length < 3){
+            ColoredMessage.redLn("Wrong \"cp\" usage");
+            return;
+        }
+        Elem elem = getElemByPath(paths[paths.length - 1]);
+        dst = elem.isDirectory() ? (Directory) elem : elem.getParent();
+        for (int i = 1; i < paths.length - 1; i++)
+            copyElem(paths[i], dst);
+    }
+
+    public void mv(String call){
+        String[] paths = Parce.parceArguments(call);
+        Directory dst;
+        if (paths.length < 3){
+            ColoredMessage.redLn("Wrong \"mv\" usage");
+            return;
+        }
+        Elem elem = getElemByPath(paths[paths.length - 1]);
+        dst = elem.isDirectory() ? (Directory) elem : elem.getParent();
+        for (int i = 1; i < paths.length - 1; i++)
+            moveElem(paths[i], dst);
+    }
+
     public void cd(String call){
         String[] commands = Parce.parceArguments(call);
         if (call.trim().equals("cd"))
             gotoRoot();
         else
-            if (commands.length > 2){
+            if (commands.length > 2)
                 ColoredMessage.redLn("Wrong \"cd\" usage");
-            }
-            else changeDirectory(commands[1]);
+            else
+                changeDirectory(commands[1]);
+    }
+
+    public void copyElem(String src, Directory dst){
+        Elem elem = getElemByPath(src);
+        dst.add(Elem.getInstance(elem));
+    }
+
+    public void moveElem(String src, Directory dst){
+        Elem elem = getElemByPath(src);
+        dst.add(Elem.getInstance(elem));
+        elem.getParent().remove(elem);
     }
 
     public void addDirectory(String name){

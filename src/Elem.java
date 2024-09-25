@@ -55,5 +55,22 @@ public abstract class Elem {
         return matcher.find();
     }
 
+    static Elem getInstance(Elem oldElem){
+        Elem newElem;
+        if (oldElem.isDirectory()) {
+            Directory dir = (Directory) oldElem;
+            newElem = new Directory(oldElem.getName(), oldElem.getParent());
+            Directory newElemAsDir = (Directory) newElem;
+            for (Elem elem : dir.getElems()){
+                newElemAsDir.add(Elem.getInstance(elem));
+            }
+        }
+        else
+            newElem = new DFile(oldElem.getName(), oldElem.getParent());
+
+
+        return newElem;
+    }
+
     // abstract public long getSize();
 }
